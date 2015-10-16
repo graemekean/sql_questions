@@ -1,0 +1,8 @@
+CREATE TABLE "shows" ("id" integer primary key, "created_at" time, "name" varchar(255), "price" float);
+
+CREATE TABLE "times" ("id" integer primary key, "time" varchar(255), "show_id" integer);
+
+CREATE TABLE "users" ("id" integer primary key, "name" varchar(255));
+
+CREATE TABLE "shows_users" ("id" integer primary key, "show_id" integer, "user_id" integer);
+

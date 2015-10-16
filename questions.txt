@@ -1,0 +1,169 @@
+SQL Questions
+
+Using the SQLite3 Database file given to you as the source of data to answer the questions. Copy and the SQL command you have used to get the answer, and paste it below the question, along with the result they gave.
+
+    Select the names of all users.
+    sqlite> select name from users;
+    Rick Henri
+    Michael Pavling
+    Sandy McMillan
+    Chae Cramb
+    Syed Atique
+    Simon Osborne
+    Kieran Pringle
+    Craig Lamont
+    Zsolt Podoba
+    Keith Martin
+    Peter Hyder
+    Alaere Samuel
+    Kathryn Kiernan
+    Iwona Sztorc
+    Nevin Officer
+    Graeme Stewart
+    Neil McGuire
+    Graeme Kean
+
+    Select the names of all shows that cost less than £15.
+    sqlite> select name from shows where price < 15.00;
+    Le Haggis
+    Paul Dabek Mischief 
+    Best of Burlesque
+    Two become One
+    Urinetown
+    Two girls, one cup of comedy
+
+    Select the names and prices of all shows, ordered by price in ascending order.
+    select * from shows ORDER BY price ASC;
+    12|2015-08-23 20:09:41.992358|Two girls, one cup of comedy|6.0
+    9|2015-08-23 20:09:41.987003|Best of Burlesque|7.99
+    10|2015-08-23 20:09:41.989455|Two become One|8.5
+    11|2015-08-23 20:09:41.991271|Urinetown|8.5
+    1|2015-08-23 20:09:41.969902|Le Haggis|12.99
+    5|2015-08-23 20:09:41.975610|Paul Dabek Mischief |12.99
+    2|2015-08-23 20:09:41.972179|Shitfaced Shakespeare|16.5
+    4|2015-08-23 20:09:41.971545|Game of Thrones - The Musical|16.5
+    6|2015-08-23 20:09:41.979784|Joe Stilgoe: Songs on Film – The Sequel|16.5
+    3|2015-08-23 20:09:41.972999|Camille O'Sullivan|17.99
+    7|2015-08-23 20:09:41.981653|Aaabeduation – A Magic Show|17.99
+    13|2015-08-23 20:09:41.996721|Balletronics|32.0
+    8|2015-08-23 20:09:41.983556|Edinburgh Royal Tattoo|32.99
+
+
+    Select the average price of all shows.
+    (calculate average in sql)
+    SELECT AVG(price) FROM shows;
+    15.9569230769231
+
+    Remember there are more than one way to calculate the average
+
+    Select the price of the least expensive show.
+    SELECT MIN(price) FROM shows;
+    6.0
+
+
+    Select the sum of the price of all shows.
+    SELECT SUM(price) FROM shows;
+    207.44
+
+
+    Select the sum of the price of all shows whose prices is less than £20.
+    SELECT SUM(price) FROM shows where price < 20.0;
+    142.45
+
+
+    Select the name and price of the most expensive show.
+    select name, max(price) from shows;
+    Edinburgh Royal Tattoo|32.99
+
+
+    Select the name and price of the second from cheapest show.
+    SELECT name, MIN( price ) FROM shows WHERE price > ( SELECT MIN( price ) FROM shows );
+    Best of Burlesque|7.99
+
+
+
+    Select the time for the Edinburgh Royal Tattoo.
+    select time from times where show_id = 8;
+    22:00
+
+
+    Select the names of all users whose names start with the letter "N".
+     SELECT name FROM users WHERE name LIKE 'N%';
+    Nevin Officer
+    Neil McGuire
+
+
+    Select the names of users whose names contain "mi".
+    SELECT name FROM users WHERE name LIKE '%mi%';
+    Michael Pavling
+    Sandy McMillan
+
+
+    Select the number of users who want to see "Shitfaced Shakespeare".
+    SELECT COUNT(user_id) FROM shows_users where show_id = 2;
+    7
+   
+
+
+    Select all of the user names and the count of shows they're going to see.
+    SELECT COUNT(user_id) FROM shows_users;
+    81
+
+
+----TODO
+
+    SELECT all users who are going to a show at 17:15.
+select name from users where id = show_id from times where time = '17:15';
+
+SELECT c1.id, c2.id, c3.id
+FROM category c1
+JOIN category c2 ON c1.id = c2.id_parent
+JOIN category c3 ON c2.id = c3.id_parent
+JOIN category_name cn1 ON c1.id = cn1.id
+JOIN category_name cn2 ON c2.id = cn2.id
+JOIN category_name cn3 ON c3.id = cn3.id
+WHERE cn1.name = 'animal' AND cn2.name = 'mammal' AND cn3.name = 'lion'
+    
+
+
+
+    Insert a user with the name "Antonio Goncalves" into the users table.
+    INSERT INTO "users" (name) VALUES ('Antonio Goncalves')
+
+
+    Select the id of the user with your name.
+    select id from users where name = 'Graeme Kean';
+    18
+
+
+
+    Insert a record that Antonio Goncalves wants to attend the show "Two girls, one cup of comedy".
+    INSERT INTO "shows_users" (show_id, user_id) VALUES (12, 19);
+
+
+
+    Updates the name of the "Antonio Goncalves" user to be "Tony Goncalves".
+    Update users set name = 'Tony Goncalves' where name = 'Antonio Goncalves';
+
+
+
+
+
+    Deletes the user with the name 'Tony Goncalves'.
+    delete from users where name = 'Tony Goncalves';
+
+
+
+
+
+    Deletes the shows for the user you just deleted.
+    delete from shows_users where user_id = 19;
+
+
+
+
+Hints
+
+    As with anything, if you get stuck, move on, then go back if you have time.
+    Don't spend all night on it!
+    Use resources online to solve harder ones - there are solutions to these questions that work with what we've learnt today, but other tools exist in SQL that could make the queries 'better' or 'easier'.
