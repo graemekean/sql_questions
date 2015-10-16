@@ -72,19 +72,38 @@ Using the SQLite3 Database file given to you as the source of data to answer the
 
 
     Select the name and price of the most expensive show.
+    (question might return more than one value - need to clarify the question)
     select name, max(price) from shows;
     Edinburgh Royal Tattoo|32.99
+OR
+    select name, price from shows where price = (select max(price) from shows);
+BEST
+    select name, price from shows order by price desc limit 1;
 
 
     Select the name and price of the second from cheapest show.
     SELECT name, MIN( price ) FROM shows WHERE price > ( SELECT MIN( price ) FROM shows );
     Best of Burlesque|7.99
 
+    OR BETTER
+
+    select name, price from shows order by price asc limit 1 offset 1;
+
 
 
     Select the time for the Edinburgh Royal Tattoo.
     select time from times where show_id = 8;
     22:00
+
+    select time from times where id = (select id from shows where name = 'Edinburgh Royal Tattoo');
+OR
+    select name, time from shows, times where name = 'Edinburgh Royal Tattoo' and shows.id = times.id;
+OR
+    select time from shows, times where name = 'Edinburgh Royal Tattoo' and shows.id = times.show_id;
+GOOD
+    select time from times join shows on shows.id = times.show_id where name = 'Edinburgh Royal Tattoo';
+BETTER STILL
+    select t.time from times t join shows on s.id = t.show_id where s.name = 'Edinburgh Royal Tattoo';
 
 
     Select the names of all users whose names start with the letter "N".
@@ -100,12 +119,20 @@ Using the SQLite3 Database file given to you as the source of data to answer the
 
 
     Select the number of users who want to see "Shitfaced Shakespeare".
-    SELECT COUNT(user_id) FROM shows_users where show_id = 2;
+    
+BEST
+    select count(su.id) from shows_users su join shows s on su.show_id = s.id where s.name = 'Shitfaced Shakespeare';
     7
+
    
-
-
     Select all of the user names and the count of shows they're going to see.
+    select users.name, count(shows_users.show_id) from users inner join shows_users on users.id = shows_users.user.id group by name;
+
+BEST - RETURNS USER EVEN NOT GOING TO SHOWS
+
+    select u.name, count(su.show_id) from users u LEFT JOIN shows_users su ON su.user_id = u.id GROUP BY u.id;
+
+
     SELECT COUNT(user_id) FROM shows_users;
     81
 
@@ -113,16 +140,13 @@ Using the SQLite3 Database file given to you as the source of data to answer the
 ----TODO
 
     SELECT all users who are going to a show at 17:15.
-select name from users where id = show_id from times where time = '17:15';
 
-SELECT c1.id, c2.id, c3.id
-FROM category c1
-JOIN category c2 ON c1.id = c2.id_parent
-JOIN category c3 ON c2.id = c3.id_parent
-JOIN category_name cn1 ON c1.id = cn1.id
-JOIN category_name cn2 ON c2.id = cn2.id
-JOIN category_name cn3 ON c3.id = cn3.id
-WHERE cn1.name = 'animal' AND cn2.name = 'mammal' AND cn3.name = 'lion'
+    select show_id from times where time = '17:15'; select distinct user_id from shows_users where show_id in (3,6);
+    select name from users where id IN (1, 3, 5, 8, 9, 13, 15, 11, 12, 16, 17);
+
+BEST
+    SELECT u.name from users u JOIN shows_users su ON u.id = su.user_id JOIN times t ON su.show_id = t.show_id WHERE t.time = '17:15';
+    
     
 
 
