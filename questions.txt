@@ -187,7 +187,7 @@ BAD
 GOOD
     DELETE FROM shows_users WHERE user_id NOT IN (SELECT id FROM users);
 BEST
-    
+    should not be nested selected but is ok in this case
 
 
 
