@@ -182,8 +182,12 @@ BEST
 
 
     Deletes the shows for the user you just deleted.
+BAD
     delete from shows_users where user_id = 19;
-
+GOOD
+    DELETE FROM shows_users WHERE user_id NOT IN (SELECT id FROM users);
+BEST
+    
 
 
 
